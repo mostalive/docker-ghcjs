@@ -20,7 +20,7 @@ RUN git clone https://github.com/ghcjs/ghcjs-prim.git \
 
 ENV PATH ./root/.cabal/bin:/opt/ghc/7.8.3/bin:/opt/cabal/1.20/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-RUN ghcjs-boot --dev
+RUN PATH=./root/.cabal/bin:$PATH ghcjs-boot --dev
 CMD ["/bin/bash"]
 
 
