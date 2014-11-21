@@ -1,13 +1,34 @@
 Docker-ghcjs
 ============
 
-Base container for using [ghcjs](https://github.com/ghcjs/ghcjs), as minimal as possible, built from the
+Base container for using [ghcjs](https://github.com/ghcjs/ghcjs), as
+minimal as possible against the latest ghcjs, built from the
 [ghjcs installation instructions](https://github.com/ghcjs/ghcjs). Based on standard haskell:7.8 container
 with alex and happy. 
 
 You can use this container to play around with ghcjs, or use it as a
 source to build a more specific image in a FROM chain.
 
+# Running
+
+Download from dockerhub and run in one go
+
+```
+docker run -i -t atddio/docker-ghcjs
+```
+
+For compiling against a directory on the host machine, run it with -v,
+see [Docker
+volumes](https://docs.docker.com/userguide/dockervolumes/) for
+instructions.
+
+# Building
+
+```
+docker build .
+```
+
+# Background
 Unlike https://github.com/rvl/ghcjs-docker, which uses git submodules I chose to download the
 relevant ghcjs git repositories in the Docker file, so whenever you run
 docker build you can get the latest versions. As long as the
