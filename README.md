@@ -1,7 +1,7 @@
 Docker-ghcjs
 ============
 
-Base container for using [ghcjs](https://github.com/ghcjs/ghcjs), as
+Base container for using the haskell to javascript compiler [ghcjs](https://github.com/ghcjs/ghcjs), as
 minimal as possible against the latest ghcjs, built from the
 [ghjcs installation instructions](https://github.com/ghcjs/ghcjs). Based on standard haskell:7.8 container
 with alex and happy. 
