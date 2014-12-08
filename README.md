@@ -1,7 +1,10 @@
 Docker-ghcjs
 ============
 
-Base container for using the haskell to javascript compiler [ghcjs](https://github.com/ghcjs/ghcjs), as
+Head over to  [ghcjs](https://github.com/ghcjs/ghcjs) for the latest
+official version of the Dockerfile to build ghcjs.
+
+This repository is used to experiment with docker files for ghcjs, the haskell to javascript compiler [ghcjs](https://github.com/ghcjs/ghcjs), as
 minimal as possible against the latest ghcjs, built from the
 [ghjcs installation instructions](https://github.com/ghcjs/ghcjs). Based on standard haskell:7.8 container
 with alex and happy. 

@@ -8,20 +8,21 @@ RUN apt-get update \
 RUN curl -sL https://deb.nodesource.com/setup | bash - \
     && apt-get install -y nodejs
 
+RUN addgroup --gid 1001 curry \
+     && adduser --disabled-password --gecos "dontcare" --gid 1001 --uid 1001 -home /home/curry curry
+
+USER curry
+WORKDIR /home/curry
+
 RUN git clone https://github.com/ghcjs/cabal.git \
     && cd cabal \
     && git checkout ghcjs \
     && cabal update \
-    && cabal install ./Cabal ./cabal-install
+    && cabal install -j4 ./Cabal ./cabal-install
 
 RUN git clone https://github.com/ghcjs/ghcjs-prim.git \
     && git clone https://github.com/ghcjs/ghcjs.git \
-    && cabal install --reorder-goals --max-backjumps=1 ./ghcjs ./ghcjs-prim
-
-ENV PATH /root/.cabal/bin:/opt/ghc/7.8.3/bin:/opt/cabal/1.20/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-RUN which ghcjs-pkg
-
-RUN ghcjs-boot --dev
-CMD ["/bin/bash"]
+    && cabal update \
+    && cabal install -j4 --reorder-goals ./ghcjs ./ghcjs-prim
 
 
