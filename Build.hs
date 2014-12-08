@@ -9,36 +9,38 @@ trackImage uuidFile image = do
         let uuid = head $ words $ last $ lines stdout
         writeFileChanged uuidFile uuid
 
-buildContainer :: FilePath -> String -> FilePath -> Action ()
-buildContainer uuidFile imageName dockerFilePath = do
-  () <- cmd "docker build -t " [imageName] [dockerFilePath]
+buildContainer :: FilePath -> String -> String -> Action ()
+buildContainer uuidFile repository image = do
+  () <- cmd "docker build -t " [imageName] [image]
   trackImage uuidFile imageName
+  where imageName = repository </> image
 
 main :: IO ()
 main =
   shakeArgs shakeOptions{shakeFiles="_build/"} $ do
-    want ["images" </> "ghcjs-cabal.uuid", "images" </> "ghcjs-boot.uuid"]
+    want [ghcjsCabal, ghcjsBoot]
 
     phony "clean" $ do
         putNormal "Cleaning files in _build"
         removeFilesAfter "_build" ["//*"]
 
-    haskellUuid %> \uuidFile -> do
+    haskell %> \uuidFile -> do
         alwaysRerun
         trackImage uuidFile "haskell:7.8"
 
-    images </> "ghcjs-cabal.uuid" *> \uuidFile -> do
+    ghcjsCabal *> \uuidFile -> do
         let image = dropExtension $ takeFileName uuidFile
-        need [haskellUuid, image </> dockerfile]
-        buildContainer uuidFile (repository </> image) image
+        need [haskell, image </> dockerfile]
+        buildContainer uuidFile repository image
 
-    images </> "ghcjs-boot.uuid" *> \uuidFile -> do
+    ghcjsBoot *> \uuidFile -> do
         let image = dropExtension $ takeFileName uuidFile
-        need [ghcjsUuid, image </> dockerfile]
-        buildContainer uuidFile (repository </> image) image
+        need [ghcjsCabal, image </> dockerfile]
+        buildContainer uuidFile repository image
     where
-      haskellUuid = "images" </> "haskell-7.8.uuid"
-      ghcjsUuid = "images" </> "ghcjs-cabal.uuid"
+      haskell = images </> "haskell-7.8.uuid"
+      ghcjsCabal = images </> "ghcjs-cabal.uuid"
+      ghcjsBoot = images </> "ghcjs-boot.uuid"
       dockerfile = "Dockerfile"
       repository = "atddio"
       images = "images"
