@@ -23,14 +23,22 @@ main =
         putNormal "Cleaning files in _build"
         removeFilesAfter "_build" ["//*"]
 
-    "images/haskell-7.8.uuid" %> \out -> do
+    haskellUuid %> \uuidFile -> do
         alwaysRerun
-        trackImage out "haskell:7.8"
+        trackImage uuidFile "haskell:7.8"
 
-    "images/ghcjs-cabal.uuid" *> \uuidFile -> do
-        need ["images" </> "haskell-7.8.uuid","ghcjs-cabal" </> "Dockerfile"]
-        buildContainer uuidFile ("atddio" </> "ghcjs-cabal") "ghcjs-cabal" 
+    images </> "ghcjs-cabal.uuid" *> \uuidFile -> do
+        let image = dropExtension $ takeFileName uuidFile
+        need [haskellUuid, image </> dockerfile]
+        buildContainer uuidFile (repository </> image) image
 
-    "images/ghcjs-boot.uuid" *> \uuidFile -> do
-        need ["images" </> "ghcjs-cabal.uuid", "ghcjs-boot" </> "Dockerfile"]
-        buildContainer uuidFile ("atddio" </> "ghcjs-boot") "ghcjs-boot"
+    images </> "ghcjs-boot.uuid" *> \uuidFile -> do
+        let image = dropExtension $ takeFileName uuidFile
+        need [ghcjsUuid, image </> dockerfile]
+        buildContainer uuidFile (repository </> image) image
+    where
+      haskellUuid = "images" </> "haskell-7.8.uuid"
+      ghcjsUuid = "images" </> "ghcjs-cabal.uuid"
+      dockerfile = "Dockerfile"
+      repository = "atddio"
+      images = "images"
