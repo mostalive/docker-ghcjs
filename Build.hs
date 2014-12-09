@@ -18,7 +18,7 @@ buildContainer uuidFile repository image = do
 main :: IO ()
 main =
   shakeArgs shakeOptions{shakeFiles="_build/"} $ do
-    want [ghcjsLibs]
+    want [ghcjsDevenv]
 
     phony "clean" $ do
         putNormal "Cleaning files in _build"
@@ -41,11 +41,17 @@ main =
         let image = dropExtension $ takeFileName uuidFile
         need [ghcjsCabal, image </> dockerfile]
         buildContainer uuidFile repository image
+
+    ghcjsDevenv *> \uuidFile -> do
+        let image = dropExtension $ takeFileName uuidFile
+        need [ghcjsLibs, image </> dockerfile]
+        buildContainer uuidFile repository image
     where
       haskell = images </> "haskell-7.8.uuid"
       ghcjsCabal = images </> "ghcjs-cabal.uuid"
       ghcjsBoot = images </> "ghcjs-boot.uuid"
       ghcjsLibs = images </> "ghcjs-libs.uuid"
+      ghcjsDevenv = images </> "ghcjs-sample-devenv.uuid"
       dockerfile = "Dockerfile"
       repository = "atddio"
       images = "images"
