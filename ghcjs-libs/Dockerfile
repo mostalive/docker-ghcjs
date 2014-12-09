@@ -23,4 +23,8 @@ RUN git clone https://github.com/ghcjs/ghcjs-dom.git \
 RUN git clone https://github.com/ghcjs/ghcjs-jquery.git \
     && cd ghcjs-jquery \
     && cabal install --ghcjs -j4 
-#install vanilla-js.com for ajax instead of jquery
+#install vanilla-js.com for ajax instead of jquery?
+
+RUN git clone https://github.com/ghcjs/ghcjs-canvas.git \
+    && cd ghcjs-canvas \
+    && cabal install --ghcjs -j4 
