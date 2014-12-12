@@ -39,7 +39,7 @@ main =
         buildContainer uuidFile repository image
     ghcjsLibs *> \uuidFile -> do
         let image = dropExtension $ takeFileName uuidFile
-        need [ghcjsCabal, image </> dockerfile]
+        need [ghcjsBoot, image </> dockerfile]
         buildContainer uuidFile repository image
 
     ghcjsDevenv *> \uuidFile -> do
