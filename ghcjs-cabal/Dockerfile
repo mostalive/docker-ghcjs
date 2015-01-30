@@ -14,15 +14,15 @@ RUN addgroup --gid 1001 curry \
 USER curry
 WORKDIR /home/curry
 
-RUN git clone https://github.com/ghcjs/cabal.git \
-    && cd cabal \
-    && git checkout ghcjs \
-    && cabal update \
-    && cabal install -j4 ./Cabal ./cabal-install
+RUN cabal update && \
+    cabal install cabal-install && \
+    cabal install Cabal
 
-RUN git clone https://github.com/ghcjs/ghcjs-prim.git \
-    && git clone https://github.com/ghcjs/ghcjs.git \
-    && cabal update \
-    && cabal install -j4 --reorder-goals ./ghcjs ./ghcjs-prim
+RUN echo $PATH && which cabal && cabal --version
 
+RUN git clone https://github.com/ghcjs/ghcjs-prim.git && \
+    git clone https://github.com/ghcjs/ghcjs.git   && \
+    cabal install --reorder-goals --max-backjumps=-1 ./ghcjs ./ghcjs-prim
+
+#:RUN which ghcjs-pkg
 

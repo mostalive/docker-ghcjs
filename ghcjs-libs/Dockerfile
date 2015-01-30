@@ -4,27 +4,27 @@ FROM atddio/ghcjs-boot
 
 USER curry
 
-RUN git clone https://github.com/ghcjs/ghcjs-base \
-    && cd ghcjs-base \
-    && cabal install --ghcjs -j4 
+RUN cabal update
+
+RUN cabal install --help && \
+    cabal -V && \
+    which ghc && \
+    ghc -V && \
+    ghcjs -V
 
 RUN git clone https://github.com/ghcjs/ghcjs-ffiqq \
     && cd ghcjs-ffiqq \
-    && cabal install --ghcjs -j4
+    && cabal install --ghcjs
 
 RUN git clone https://github.com/ghcjs/ghcjs-vdom.git \
     && cd ghcjs-vdom \
-    && cabal install --ghcjs -j4 
-
-RUN git clone https://github.com/ghcjs/ghcjs-dom.git \
-    && cd ghcjs-dom \
-    && cabal install --ghcjs -j4 
+    && cabal install --ghcjs
 
 RUN git clone https://github.com/ghcjs/ghcjs-jquery.git \
     && cd ghcjs-jquery \
-    && cabal install --ghcjs -j4 
+    && cabal install --ghcjs
 #install vanilla-js.com for ajax instead of jquery?
 
 RUN git clone https://github.com/ghcjs/ghcjs-canvas.git \
     && cd ghcjs-canvas \
-    && cabal install --ghcjs -j4 
+    && cabal install --ghcjs
