@@ -28,3 +28,9 @@ RUN git clone https://github.com/ghcjs/ghcjs-jquery.git \
 RUN git clone https://github.com/ghcjs/ghcjs-canvas.git \
     && cd ghcjs-canvas \
     && cabal install --ghcjs
+
+ADD matchuidgids.sh .
+
+# the matchuidgids script needs to be root, and will switch to curry user afterwards
+USER root
+CMD /home/curry/matchuidgids.sh
