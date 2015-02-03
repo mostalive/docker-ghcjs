@@ -11,7 +11,7 @@ trackImage uuidFile image = do
 
 buildContainer :: FilePath -> String -> String -> Action ()
 buildContainer uuidFile repository image = do
-  () <- cmd "docker build -t " [imageName] [image]
+  () <- cmd "docker build --no-cache -t " [imageName] [image]
   trackImage uuidFile imageName
   where imageName = repository </> image
 
@@ -26,7 +26,8 @@ main =
 
     haskell %> \uuidFile -> do
         alwaysRerun
-        trackImage uuidFile "haskell:7.8"
+        () <- cmd ["docker", "pull", haskellImage]
+        trackImage uuidFile haskellImage
 
     ghcjsCabal *> \uuidFile -> do
         let image = dropExtension $ takeFileName uuidFile
@@ -46,12 +47,20 @@ main =
         let image = dropExtension $ takeFileName uuidFile
         need [ghcjsLibs, image </> dockerfile]
         buildContainer uuidFile repository image
+
+    ghcjsEmacs *> \uuidFile -> do
+        let image = dropExtension $ takeFileName uuidFile
+        need [ghcjsLibs, image </> dockerfile]
+        buildContainer uuidFile repository image
+    
     where
       haskell = images </> "haskell-7.8.uuid"
+      haskellImage = "haskell:7.8"
       ghcjsCabal = images </> "ghcjs-cabal.uuid"
       ghcjsBoot = images </> "ghcjs-boot.uuid"
       ghcjsLibs = images </> "ghcjs-libs.uuid"
       ghcjsDevenv = images </> "ghcjs-sample-devenv.uuid"
+      ghcjsEmacs = images </> "ghcjs-emacs.uuid"
       dockerfile = "Dockerfile"
       repository = "atddio"
       images = "images"
