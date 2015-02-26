@@ -18,7 +18,7 @@ buildContainer uuidFile repository image = do
 main :: IO ()
 main =
   shakeArgs shakeOptions{shakeFiles="_build/"} $ do
-    want [ghcjsDevenv]
+    want [ghcjsDevenv, ghcjsEmacs]
 
     phony "clean" $ do
         putNormal "Cleaning files in _build"
